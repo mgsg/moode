@@ -32,6 +32,9 @@ RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (2
 RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (3, 'artist', '')")
 RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (4, 'album', '')")
 RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (5, 'cover_url', '')")
+RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (6, 'volume', '')")
+RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (7, 'duration_ms', '')")
+RESULT=$(sqlite3 $SQLDB "INSERT INTO cfg_nowplaying (id, param, value) VALUES (8, 'position_ms', '')")
 
 RESULT=$(sqlite3 $SQLDB "select value from cfg_nowplaying")
 readarray -t arr <<<"$RESULT"

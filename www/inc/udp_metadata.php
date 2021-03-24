@@ -93,26 +93,30 @@ function processMetadataInfo($metadata) {
           debugLog('CoverUrl=' . (string)$metaobj->metadata->albumartId[0] );
         }
       } catch (Exception $e) {
-        debugLog('Exception showing metadata=' . e->getMessage());
+        debugLog('Exception showing metadata=' . $e->getMessage());
       }      
       try {
         $dbh  = cfgdb_connect();
         cfgdb_update('cfg_nowplaying', $dbh, 'metadata', json_encode($metaobj->metadata));
         cfgdb_update('cfg_nowplaying', $dbh, 'title', $metaobj->metadata->track_name);
         cfgdb_update('cfg_nowplaying', $dbh, 'album', $metaobj->metadata->album_name);
-        cfgdb_update('cfg_nowplaying', $dbh, 'artist', $metaobj->metadata->artist_name[0]);      
+        cfgdb_update('cfg_nowplaying', $dbh, 'artist', $metaobj->metadata->artist_name[0]);
         if (isset($metaobj->metadata->albumartId)) {
-          cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', 'https://i.scdn.co/image/' . $metaobj->metadata->albumartId[0]);
+          cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', $metaobj->metadata->albumartId[0]);
         } else {
           cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', '');
         }
+        cfgdb_update('cfg_nowplaying', $dbh, 'duration_ms', $metaobj->metadata->duration_ms);
+        cfgdb_update('cfg_nowplaying', $dbh, 'position_ms', $metaobj->metadata->position_ms);
         $dbh = null;      
       } catch (Exception $e) {
-        debugLog('Exception updating DB metadata=' . e->getMessage());
+        debugLog('Exception updating DB metadata=' . $e->getMessage());
       }
     } else if (isset($metaobj->volume)) {
+      $dbh  = cfgdb_connect();
       $newVolume = $metaobj->volume;
       debugLog('New volume =[' . $newVolume . ']');
+      cfgdb_update('cfg_nowplaying', $dbh, 'volume', $metaobj->volume);
     }
   } else if ($metadata === 'kSpDeviceActive') {
     debugLog('kSpDeviceActive');

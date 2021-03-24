@@ -2655,7 +2655,7 @@ function startSpotify() {
     fwrite($fh, $data);
     fclose($fh);
 
-    // TODO: check that vollibrespot & upd_metadata.php exists
+    // TODO: check that vollibrespot & udp_metadata.php exists
     $outputfile = '/var/log/vollibrespot.log';
     $pidfile = '/var/log/vollibrespot.pid';
     $cmd = 'vollibrespot' .
@@ -2669,7 +2669,7 @@ function startSpotify() {
 
     // Start process that reads udp metadata and executes a url
     $cmd2 = 'php /var/www/inc/udp_metadata.php';
-    $outputfile2 = '/var/log/upd_metadata.log';
+    $outputfile2 = '/var/log/udp_metadata.log';
     $pidfile2 = '/var/log/udp_metadata.pid';
     workerLog('startSpotify(): (' . $cmd2 . ')');  
     // sysCmd($cmd2);
@@ -2697,8 +2697,7 @@ function stopSpotify() {
 	sysCmd('killall librespot');
   // vollibrespot + udpclient - killall doesn't work with php launched processes: use pkill with saved PID
   sysCmd('killall vollibrespot');
-  sysCmd('pkill -F /var/log/udp_metadata.pid')
-  
+  sysCmd('pkill -F /var/log/udp_metadata.pid');
 	sysCmd('/var/www/vol.sh -restore');
 	// Reset to inactive
 	playerSession('write', 'spotactive', '0');

@@ -562,6 +562,9 @@ title=${arr[1]}
 artist=${arr[2]}
 album=${arr[3]}
 cover_url=${arr[4]}
+volume=${arr[5]}
+duration_ms=${arr[6]}
+position_ms=${arr[7]}
 
 # Squeezelite settings
 RESULT=$(sqlite3 $SQLDB "select value from cfg_sl")

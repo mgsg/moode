@@ -462,6 +462,9 @@ INSERT INTO cfg_nowplaying (id, param, value) VALUES (2, 'title', '');
 INSERT INTO cfg_nowplaying (id, param, value) VALUES (3, 'artist', '');
 INSERT INTO cfg_nowplaying (id, param, value) VALUES (4, 'album', '');
 INSERT INTO cfg_nowplaying (id, param, value) VALUES (5, 'cover_url', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (6, 'volume', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (7, 'duration_ms', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (8, 'position_ms', '');
 
 -- Table: cfg_network
 CREATE TABLE cfg_network (id INTEGER PRIMARY KEY, iface CHAR (5), method CHAR (6), ipaddr CHAR (15), netmask CHAR (15), gateway CHAR (15), pridns CHAR (15), secdns CHAR (15), wlanssid CHAR (32), wlansec CHAR (4), wlanpwd CHAR (64), wlan_psk CHAR (64), wlan_country CHAR (2), wlan_channel CHAR (3));
