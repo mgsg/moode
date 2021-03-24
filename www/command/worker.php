@@ -1530,6 +1530,8 @@ function runQueuedJob() {
 					startAirplay();
 				}
 				if ($_SESSION['spotifysvc'] == 1) {
+          sysCmd('killall vollibrespot');
+          sysCmd('killall udp_metadata');
 					sysCmd('killall librespot');
 					startSpotify();
 				}

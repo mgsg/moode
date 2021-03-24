@@ -61,6 +61,9 @@ $_select['normalization_pregain'] = $cfg_spotify['normalization_pregain'];
 // Autoplay
 $_select['autoplay'] .= "<option value=\"Yes\" " . (($cfg_spotify['autoplay'] == 'Yes') ? "selected" : "") . ">Yes</option>\n";
 $_select['autoplay'] .= "<option value=\"No\" " . (($cfg_spotify['autoplay'] == 'No') ? "selected" : "") . ">No</option>\n";
+// Vollibrespot
+$_select['vollibrespot'] .= "<option value=\"Yes\" " . (($cfg_spotify['vollibrespot'] == 'Yes') ? "selected" : "") . ">Yes</option>\n";
+$_select['vollibrespot'] .= "<option value=\"No\" " . (($cfg_spotify['vollibrespot'] == 'No') ? "selected" : "") . ">No</option>\n";
 
 waitWorker(1, 'spo_config');
 

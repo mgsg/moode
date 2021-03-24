@@ -552,6 +552,16 @@ volume_curve=${arr[2]}
 volume_normalization=${arr[3]}
 normalization_pregain=${arr[4]}
 spotify_autoplay=${arr[5]}
+vollibrespot=${arr[6]}
+
+# Now Playing settings
+RESULT=$(sqlite3 $SQLDB "select value from cfg_nowplaying")
+readarray -t arr <<<"$RESULT"
+metadata=${arr[0]}
+title=${arr[1]}
+artist=${arr[2]}
+album=${arr[3]}
+cover_url=${arr[4]}
 
 # Squeezelite settings
 RESULT=$(sqlite3 $SQLDB "select value from cfg_sl")

@@ -60,18 +60,45 @@ if ($_GET['state'] == $current['state']) {
 }
 
 // Create enhanced metadata
-//workerLog('engine-mpd: Generating enhanced metadata');
+workerLog('engine-mpd: Generating enhanced metadata');
 $current = enhanceMetadata($current, $sock, 'engine_mpd_php');
 closeMpdSock($sock);
 //workerLog('engine-mpd: Metadata returned to client: Size=(' . sizeof($current) . ')');
 //foreach ($current as $key => $value) {workerLog('engine-mpd: Metadata returned to client: Raw=(' . $key . ' ' . $value . ')');}
 //workerLog('engine-mpd: Metadata returned to client: Json=(' . json_encode($current) . ')');
 
+// Spotify metadata
+$resultSpotify = sdbquery("SELECT * FROM cfg_spotify", cfgdb_connect());
+$cfg_spotify = array();
+foreach ($resultSpotify as $row) {
+  $cfg_spotify[$row['param']] = $row['value'];
+}
+
+if ($cfg_spotify['vollibrespot'] == 'Yes') {
+  workerLog('engine-mpd: Getting Spotify metadata');
+  sleep(10);
+  $resultMetadata = sdbquery("SELECT * FROM cfg_nowplaying", cfgdb_connect());
+  $cfg_nowplaying = array();
+  foreach ($resultMetadata as $row) {
+    $cfg_nowplaying[$row['param']] = $row['value'];
+  }
+  workerLog('engine-mpd: Spotify title=(' . $cfg_nowplaying['title'] . ')');
+
+  $current['artist'] = $cfg_nowplaying['artist'];
+  $current['title'] = $cfg_nowplaying['title'];
+  $current['album'] = $cfg_nowplaying['album'];
+  $current['state'] = $cfg_nowplaying['play'];
+  $current['coverurl'] = $cfg_nowplaying['cover_url'];
+  workerLog('engine-mpd: Metadata returned to client: Json=(' . json_encode($current) . ')');
+  $current_json = json_encode($current, JSON_UNESCAPED_SLASHES);
+} else {
+  $current_json = json_encode($current);
+}
+
 // @ohinckel https: //github.com/moode-player/moode/pull/14/files
-$current_json = json_encode($current);
 if ($current_json === FALSE) {
-	echo json_encode(array('error' => array('code' => json_last_error(), 'message' => json_last_error_msg())));
+  echo json_encode(array('error' => array('code' => json_last_error(), 'message' => json_last_error_msg())));
 }
 else {
-	echo $current_json;
+  echo $current_json;
 }

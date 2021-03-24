@@ -453,6 +453,15 @@ INSERT INTO cfg_spotify (id, param, value) VALUES (3, 'volume_curve', 'log');
 INSERT INTO cfg_spotify (id, param, value) VALUES (4, 'volume_normalization', 'No');
 INSERT INTO cfg_spotify (id, param, value) VALUES (5, 'normalization_pregain', '3');
 INSERT INTO cfg_spotify (id, param, value) VALUES (6, 'autoplay', 'No');
+INSERT INTO cfg_spotify (id, param, value) VALUES (7, 'vollibrespot', 'No');
+
+-- Table: cfg_nowplaying
+CREATE TABLE cfg_nowplaying (id INTEGER PRIMARY KEY, param CHAR (32), value CHAR (32));
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (1, 'metadata', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (2, 'title', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (3, 'artist', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (4, 'album', '');
+INSERT INTO cfg_nowplaying (id, param, value) VALUES (5, 'cover_url', '');
 
 -- Table: cfg_network
 CREATE TABLE cfg_network (id INTEGER PRIMARY KEY, iface CHAR (5), method CHAR (6), ipaddr CHAR (15), netmask CHAR (15), gateway CHAR (15), pridns CHAR (15), secdns CHAR (15), wlanssid CHAR (32), wlansec CHAR (4), wlanpwd CHAR (64), wlan_psk CHAR (64), wlan_country CHAR (2), wlan_channel CHAR (3));
