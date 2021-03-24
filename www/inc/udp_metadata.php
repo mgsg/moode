@@ -82,22 +82,34 @@ function processMetadataInfo($metadata) {
       // Restore ALSA VOL      
     } else if (isset($metaobj->metadata)) {  
       debugLog('Metadata arrived');
-      debugLog('Metadata=' . json_encode($metaobj->metadata) );
-      debugLog('Title=' . (string)$metaobj->metadata->track_name );
-      debugLog('Album=' . (string)$metaobj->metadata->album_name );
-      debugLog('Artist=' . (string)$metaobj->metadata->artist_name[0] );
-      debugLog('CoverUrl=' . (string)$metaobj->metadata->albumartId[0] );
-      $dbh  = cfgdb_connect();
-      cfgdb_update('cfg_nowplaying', $dbh, 'metadata', json_encode($metaobj->metadata));
-      cfgdb_update('cfg_nowplaying', $dbh, 'title', $metaobj->metadata->track_name);
-      cfgdb_update('cfg_nowplaying', $dbh, 'album', $metaobj->metadata->album_name);
-      cfgdb_update('cfg_nowplaying', $dbh, 'artist', $metaobj->metadata->artist_name[0]);
-      if (isset($metaobj->metadata->albumartId)) {
-        cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', 'https://i.scdn.co/image/' . $metaobj->metadata->albumartId[0]);
-      } else {
-        cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', '');
+      try {
+        debugLog('Metadata=' . json_encode($metaobj->metadata) );
+        debugLog('Title=' . (string)$metaobj->metadata->track_name );
+        debugLog('Album=' . (string)$metaobj->metadata->album_name );
+        if (isset($metaobj->metadata->artist_name)) {
+          debugLog('Artist=' . (string)$metaobj->metadata->artist_name[0] );
+        }
+        if (isset($metaobj->metadata->albumartId)) {
+          debugLog('CoverUrl=' . (string)$metaobj->metadata->albumartId[0] );
+        }
+      } catch (Exception $e) {
+        debugLog('Exception showing metadata=' . e->getMessage());
+      }      
+      try {
+        $dbh  = cfgdb_connect();
+        cfgdb_update('cfg_nowplaying', $dbh, 'metadata', json_encode($metaobj->metadata));
+        cfgdb_update('cfg_nowplaying', $dbh, 'title', $metaobj->metadata->track_name);
+        cfgdb_update('cfg_nowplaying', $dbh, 'album', $metaobj->metadata->album_name);
+        cfgdb_update('cfg_nowplaying', $dbh, 'artist', $metaobj->metadata->artist_name[0]);      
+        if (isset($metaobj->metadata->albumartId)) {
+          cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', 'https://i.scdn.co/image/' . $metaobj->metadata->albumartId[0]);
+        } else {
+          cfgdb_update('cfg_nowplaying', $dbh, 'cover_url', '');
+        }
+        $dbh = null;      
+      } catch (Exception $e) {
+        debugLog('Exception updating DB metadata=' . e->getMessage());
       }
-      $dbh = null;      
     } else if (isset($metaobj->volume)) {
       $newVolume = $metaobj->volume;
       debugLog('New volume =[' . $newVolume . ']');

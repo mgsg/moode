@@ -14,7 +14,6 @@ cp ./vollibrespot            /usr/local/bin
 cp ./spo-config.php          /var/www
 cp ./engine-mpd.php          /var/www
 cp ./spo-config.html         /var/www/templates
-cp ./playerlib.js            /var/www/js
 cp ./playerlib.php           /var/www/inc
 cp ./udp_metadata.php        /var/www/inc
 cp ./sysinfo.sh              /var/www/command
