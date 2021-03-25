@@ -13,7 +13,9 @@ chmod +x ./vollibrespot
 cp ./vollibrespot            /usr/local/bin
 cp ./spo-config.php          /var/www
 cp ./engine-mpd.php          /var/www
+cp ./renderer-status.php     /var/www
 cp ./spo-config.html         /var/www/templates
+cp ./renderertpl.html        /var/www/templates
 cp ./playerlib.php           /var/www/inc
 cp ./udp_metadata.php        /var/www/inc
 cp ./sysinfo.sh              /var/www/command

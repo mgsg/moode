@@ -1,0 +1,127 @@
+<!--
+/**
+ * moOde audio player (C) 2014 Tim Curtis
+ * http://moodeaudio.org
+ *
+ * tsunamp player ui (C) 2013 Andrea Coiutti & Simone De Gregori
+ * http://www.tsunamp.com
+ *
+ * This Program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3, or (at your option)
+ * any later version.
+ *
+ * This Program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+<!-- PLAYBACK WITH INTEGRATED QUEUE -->
+	<div id="playback-panel" class="tab-pane">
+		<div class="btnlist btnlist-top btnlist-top-pl">
+			<form id="pl-search" method="post" onSubmit="return false;">
+				<div class="input-append">
+					<input id="pl-filter" type="text" value="" placeholder="search">
+				</div>
+				<button aria-label="Reset" id="searchResetPl" class="btn hide" type="reset" value="reset"><i class="fal fa-times-circle"></i></button>
+			</form>
+		</div>
+		<div aria-label="Switch to Playbar" id="playback-switch"><div></div></div>
+		<div id="container-playback" class="container-playback txtmid">
+			<div class="no-fluid">
+				<!-- Queue -->
+				<div id="playback-queue" class="span5">
+					<div id="container-playlist">
+						<div id="playlist">
+							<ul id="pl-list" class="playlist"></ul>
+						</div>
+					</div>
+				</div>
+
+				<!-- Lnobs and playback controls -->
+				<div id="playback-controls" class="span3">
+					<div id="timezone">
+						<div id="timeknob">
+							<div id="countdown">
+								<input aria-label="Playback Time" class="playbackknob" id="time" data-min="0" data-max="1000" data-width="100%" data-thickness=".14" data-bgColor="rgba(50,50,50,0.5)" data-fgcolor="transparent" data-readonly="false">
+							</div>
+							<div aria-label="Countdown Display" id="countdown-display" href="#notarget"></div>
+							<div aria-label="Total" id="total"></div>
+						</div>
+					</div>
+
+					<div id="playbtns" class="btn-toolbar">
+						<div class="btn-group">
+							<button aria-label="Add To Favorites" class="btn btn-cmd addfav"><i class="fal fa-heart"></i></button>
+							<button aria-label="Previous" class="btn btn-cmd prev"><i class="fas fa-step-backward"></i></button>
+							<button aria-label="Play / Pause" class="btn btn-cmd play"><i class="fas fa-play"></i></button>
+							<button aria-label="Next" class="btn btn-cmd next"><i class="fas fa-step-forward"></i></button>
+						</div>
+					</div>
+					<div id="volzone">
+						<div id="volknob">
+							<div id="volcontrol" class="volume-step-limiter">
+								<input aria-label="Volume" readonly class="volumeknob" id="volume" data-min="0" data-max="100" step="10" data-width="100%" data-thickness=".14" data-bgColor="rgba(50,50,50,0.5)" data-fgColor="transparent" data-readOnly="false" data-cursor="false" data-angleArc="340" data-angleOffset="-170">
+							</div>
+							<div id="volbtns">
+								<button aria-label="Volume Up" id="volumeup" class="btn btn-cmd btn-volume">+</button>
+								<div aria-label="Volume Display" class="volume-display" href="#notarget"><div></div></div>
+								<button aria-label="Volume Down" id="volumedn" class="btn btn-cmd btn-volume">−</button>
+							</div>
+							<div aria-label="Volume Display dB" class="volume-display-db"></div>
+						</div>
+					</div>
+					<div id="togglebtns">
+						<div class="btn-group">
+							<button aria-label="Context Menu" class="btn btn-cmd playback-context-menu" data-toggle="context" data-target="#context-menu-playback"><i class="far fa-ellipsis-h"></i></button>
+							<button href="#notarget" class="btn btn-cmd toggle-song hide" data-cmd="toggle-song"><i class="fal fa-exchange-alt"></i></button>
+							<button aria-label="Random" class="btn btn-cmd btn-toggle random" data-cmd="random"><i class="fal fa-random"></i></button>
+							<button aria-label="Cover View" class="btn btn-cmd coverview"><i class="fal fa-tv"></i></button>
+							<button aria-label="Consume" class="btn btn-cmd btn-toggle consume hide" data-cmd="consume"><i class="fal fa-arrow-down"></i></button>
+							<button aria-label="Repeat" class="btn btn-cmd btn-toggle repeat hide" data-cmd="repeat"><i class="fal fa-repeat"></i></button>
+							<button aria-label="Single" class="btn btn-cmd btn-toggle single hide" data-cmd="single"><i class="fal fa-redo"></i></button>
+							<button aria-label="Random Album" class="btn btn-cmd ralbum"><i class="fal fa-dot-circle"></i></button>
+							<button aria-label="Volume" class="btn volume-popup-btn hide" data-toggle="modal"><i class="fal fa-volume-up"></i><div id="mvol-bar"><div id="mvol-bg"></div><div aria-label="Volume" id="mvol-progress"></div></div></button>
+							<button aria-label="Add To Favorites" class="btn btn-cmd addfav"><i class="fal fa-heart"></i></button>
+						</div>
+					</div>
+				</div>
+
+				<!-- Cover art and song metadata -->
+				<div id="playback-cover" class="span4">
+					<div class="covers">
+						<div id="playback-firstuse-help"><div></div></div>
+						<div aria-label="Cover Art" id="coverart-url"></div>
+						<div id="timeline">
+							<div class="timeline-bg"></div>
+							<div class="timeline-progress"></div>
+							<div class="timeline-thm">
+								<input aria-label="Time" id="timetrack" type="range" min="0" max="1000" value="0" step="1">
+							</div>
+							<div id="mobile-time">
+								<div aria-label="Countdown" id="m-countdown"></div>
+								<div aria-label="Total" id="m-total"></div>
+							</div>
+						</div>
+
+						<div id="songsand">
+							<div id="extra-tags-display"></div>
+							<div id="currentalbum-div">
+								<span id="currentalbum"></span>
+								<span class="playback-hd-badge"></span>
+							</div>
+							<span id="currentsong"></span>
+							<div id="currentartist-div">
+								<span id="currentartist"></span>
+								<span class="playback-hd-badge"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

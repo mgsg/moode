@@ -74,9 +74,11 @@ foreach ($resultSpotify as $row) {
   $cfg_spotify[$row['param']] = $row['value'];
 }
 
-if ($cfg_spotify['vollibrespot'] == 'Yes') {  
+$resultSpotActive = sdbquery("SELECT value FROM cfg_system WHERE param='spotactive'", cfgdb_connect());
+
+if ($cfg_spotify['vollibrespot'] == 'Yes' && $resultSpotActive[0]['value'] == '1') {  
   workerLog('engine-mpd: Getting Spotify metadata');
-  sleep(10);
+  // sleep(10);
 
   try {
     $resultMetadata = sdbquery("SELECT * FROM cfg_nowplaying", cfgdb_connect());
