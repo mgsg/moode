@@ -45,4 +45,4 @@ New files for this plugin:
 - Download all files from the metaspot-plugin directory to a new directory in your Raspberry Pi.
 - chmod +x metaspot-plugin-install.sh
 - sudo ./metaspot-plugin-install.sh
-- In moOde, configure the Spotify renderer again, and select "Metadata"Restart again and try.
+- In moOde, configure the Spotify renderer again, and select "Show Metadata" "Yes". Restart again and try.
