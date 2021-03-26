@@ -20,6 +20,12 @@ HOSTNAME=$(hostname -s)
 BACKUP_FILE="metaspot-backup-$HOSTNAME.tgz"
 
 ###########################################################
+# Kill previous daemons
+echo 'metaspot-plugin-start - Kill started daemons'
+killall vollibrespot 2>&1
+kill $(ps aux | grep '[p]hp /var/www/inc' | awk '{print $2}')
+
+###########################################################
 # Check if backup directory exists
 if [ -f $BACKUP_FILE ]; then
   # TODO: Backup original files

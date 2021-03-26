@@ -2667,7 +2667,8 @@ function stopSpotify() {
   // metaspot-plugin START
   sysCmd('killall vollibrespot');
   // metaspot-plugin-daemon - killall doesn't work with specific php launched process: use pkill with saved PID
-  sysCmd('pkill -F /var/log/metaspot-plugin-daemon.pid');
+  // sysCmd('pkill -F /var/log/metaspot-plugin-daemon.pid');
+  sysCmd('kill $(ps aux | grep \'[p]hp /var/www/inc\'| awk \'{print $2}\')');
   // metaspot-plugin END
 	sysCmd('/var/www/vol.sh -restore');
 	// Reset to inactive

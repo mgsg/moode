@@ -12,7 +12,7 @@ require_once dirname(__FILE__) . '/inc/playerlib.php';
 define('SQLDB', 'sqlite:/var/local/www/db/moode-sqlite3.db');
 define('SQLDB_PATH', '/var/local/www/db/moode-sqlite3.db');
 define('METASPOT_LOG', '/var/log/metaspot-plugin-ui.log');
-define('DEF_COVER', 'images/default-cover-v6.svg');
+define('DEF_COVER', 'images/default-cover-v6.png');
 
 // Debug message logger
 function rendererLog($msg, $mode = 'a') {
