@@ -73,13 +73,13 @@ function processMetadataInfo($metadata) {
       $dbh  = cfgdb_connect();
       cfgdb_update('cfg_system', $dbh, 'spotactive', '1');
       $dbh = null; 
-      Set ALSA VOL
+      // Set ALSA VOL
     } else if (isset($metaobj->state) && isset($metaobj->state->status) && $metaobj->state->status == 'pause') {
       debugLog('Playing -> spotactive=0');
       $dbh  = cfgdb_connect();
       cfgdb_update('cfg_system', $dbh, 'spotactive', '0');
       $dbh = null;   
-      Restore ALSA VOL      
+      // Restore ALSA VOL      
     } else if (isset($metaobj->metadata)) {  
       debugLog('Metadata arrived');
       try {

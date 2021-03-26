@@ -2663,7 +2663,6 @@ function startSpotify() {
       ' --verbose';
     //  ' 2>&1 > /var/log/vollibrespot.log &';
     workerLog('startSpotify(): (' . $cmd . ')');
-    debugLog('startSpotify(): (' . $cmd . ')');
     // sysCmd($cmd);
     exec(sprintf("%s > %s 2>&1 & echo $! >> %s", $cmd, $outputfile, $pidfile));
 
