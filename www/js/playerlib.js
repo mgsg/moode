@@ -933,7 +933,10 @@ function renderUI() {
     	}
     	// Spotify renderer
     	if (SESSION.json['spotactive'] == '1') {
-    		inpSrcIndicator('spotactive1', 'Spotify Active' + '<br><button class="btn disconnect-renderer" data-job="spotifysvc">disconnect</button>');
+    		inpSrcIndicator('spotactive1', 'Spotify Active' + 
+                '<br><button class="btn disconnect-renderer" data-job="spotifysvc">disconnect</button>' +
+                '<br><a class="btn renderer-status" href="renderer-status.php">status</a>' +
+            );
     	}
     	// Squeezelite renderer
     	if (SESSION.json['slactive'] == '1') {

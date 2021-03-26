@@ -70,16 +70,16 @@ function processMetadataInfo($metadata) {
     $metaobj = json_decode($metadata);
     if (isset($metaobj->state) && isset($metaobj->state->status) && $metaobj->state->status == 'play') {
       debugLog('Playing -> spotactive=1');
-      // $dbh  = cfgdb_connect();
-      // cfgdb_update('cfg_system', $dbh, 'spotactive', '1');
-      // $dbh = null; 
-      // Set ALSA VOL
+      $dbh  = cfgdb_connect();
+      cfgdb_update('cfg_system', $dbh, 'spotactive', '1');
+      $dbh = null; 
+      Set ALSA VOL
     } else if (isset($metaobj->state) && isset($metaobj->state->status) && $metaobj->state->status == 'pause') {
       debugLog('Playing -> spotactive=0');
-      // $dbh  = cfgdb_connect();
-      // cfgdb_update('cfg_system', $dbh, 'spotactive', '0');
-      // $dbh = null;   
-      // Restore ALSA VOL      
+      $dbh  = cfgdb_connect();
+      cfgdb_update('cfg_system', $dbh, 'spotactive', '0');
+      $dbh = null;   
+      Restore ALSA VOL      
     } else if (isset($metaobj->metadata)) {  
       debugLog('Metadata arrived');
       try {

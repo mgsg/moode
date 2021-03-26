@@ -19,8 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- */
+ */ 
+-->
+
 <!-- PLAYBACK WITH INTEGRATED QUEUE -->
+
+  <!-- TODO: m_g_s_g - Find out how to generate the appropriate header with all needed javascript. For now I inject that here... -->
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+  <script src="js/scripts-library.js" defer></script>
+  <script src="js/scripts-panels.js" defer></script>  
+  <script type="text/javascript" src="js/rendererlib.js"></script>
+  <script>    
+    $(document).ready(function() {
+      console.log("Rendererlib.js - Reload");
+      loadDummyData("$_current[title]", "$_current[artist]", "$_current[album]", "$_current[coverurl]");
+      setAutoRefresh(20000);
+    });
+  </script>
 	<div id="playback-panel" class="tab-pane">
 		<div class="btnlist btnlist-top btnlist-top-pl">
 			<form id="pl-search" method="post" onSubmit="return false;">

@@ -60,65 +60,15 @@ if ($_GET['state'] == $current['state']) {
 }
 
 // Create enhanced metadata
-workerLog('engine-mpd: Generating enhanced metadata');
+//workerLog('engine-mpd: Generating enhanced metadata');
 $current = enhanceMetadata($current, $sock, 'engine_mpd_php');
 closeMpdSock($sock);
 //workerLog('engine-mpd: Metadata returned to client: Size=(' . sizeof($current) . ')');
 //foreach ($current as $key => $value) {workerLog('engine-mpd: Metadata returned to client: Raw=(' . $key . ' ' . $value . ')');}
 //workerLog('engine-mpd: Metadata returned to client: Json=(' . json_encode($current) . ')');
 
-// Spotify metadata
-$resultSpotify = sdbquery("SELECT * FROM cfg_spotify", cfgdb_connect());
-$cfg_spotify = array();
-foreach ($resultSpotify as $row) {
-  $cfg_spotify[$row['param']] = $row['value'];
-}
-
-$resultSpotActive = sdbquery("SELECT value FROM cfg_system WHERE param='spotactive'", cfgdb_connect());
-
-if ($cfg_spotify['vollibrespot'] == 'Yes' && $resultSpotActive[0]['value'] == '1') {  
-  workerLog('engine-mpd: Getting Spotify metadata');
-  // sleep(10);
-
-  try {
-    $resultMetadata = sdbquery("SELECT * FROM cfg_nowplaying", cfgdb_connect());
-    $cfg_nowplaying = array();
-    foreach ($resultMetadata as $row) {
-      $cfg_nowplaying[$row['param']] = $row['value'];
-    }
-    workerLog('engine-mpd: Spotify song title=(' . $cfg_nowplaying['title'] . ')');
-
-    $milliseconds = $cfg_nowplaying['duration_ms'];
-    $seconds = floor(($milliseconds%60000)/1000);
-    $minutes = floor($milliseconds / 60000);
-    $format = '%02u:%02u';
-    $song_total_time = sprintf($format, $minutes, $seconds);
-    workerLog('engine-mpd: Spotify song duration=(' . $song_total_time . ')');
-
-    $current['artist'] = $cfg_nowplaying['artist'];
-    $current['title'] = $cfg_nowplaying['title'];
-    $current['album'] = $cfg_nowplaying['album'];
-    $current['coverurl'] = 'http://i.scdn.co/image/' . $cfg_nowplaying['cover_url'];
-    $current['cover_art_hash'] = $cfg_nowplaying['cover_url'];
-    $current['state'] = 'play';
-    $current['file'] = '';
-    // $current['elapsed'] = '00:10';      // From beginning
-    $current['time'] = $song_total_time;
-    // $current['song_percent'] = 25;
-    $current['disc'] = '';
-    $current['track'] = '-';
-    $current['encoded'] = 'Spotify';
-    $current['bitrate'] = '320bps';
-    workerLog('engine-mpd: Metadata returned to client: Json=(' . json_encode($current) . ')');
-    $current_json = json_encode($current, JSON_UNESCAPED_SLASHES);
-  } catch (Exception $e) {
-    debugLog('Exception retrieving Spotify metadata=' . $e->getMessage());
-  }
-} else {
-  $current_json = json_encode($current);
-}
-
 // @ohinckel https: //github.com/moode-player/moode/pull/14/files
+$current_json = json_encode($current);
 if ($current_json === FALSE) {
   echo json_encode(array('error' => array('code' => json_last_error(), 'message' => json_last_error_msg())));
 }
