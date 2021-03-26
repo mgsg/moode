@@ -12,6 +12,7 @@ require_once dirname(__FILE__) . '/inc/playerlib.php';
 define('SQLDB', 'sqlite:/var/local/www/db/moode-sqlite3.db');
 define('SQLDB_PATH', '/var/local/www/db/moode-sqlite3.db');
 define('METASPOT_LOG', '/var/log/metaspot-plugin-ui.log');
+define('DEF_COVER', 'images/default-cover-v6.svg');
 
 // Debug message logger
 function rendererLog($msg, $mode = 'a') {
@@ -75,6 +76,11 @@ try {
     $_current['bitrate'] = '320bps';
     workerLog('metaspot-plugin-ui: Metadata returned to client: Json=(' . json_encode($_current) . ')');
     rendererLog('metaspot-plugin-ui: Metadata returned to client: Json=(' . json_encode($_current) . ')');
+ } else {
+   // TODO: Better Message for user...
+   $_current['coverurl'] = DEF_COVER;
+   $_current['album'] = 'Spotify is not active right now';
+   $_current['title'] = 'Connect to this device to try...';
  }
 } catch (Exception $e) {
   rendererLog('Exception retrieving Spotify metadata=' . $e->getMessage());
