@@ -2,6 +2,8 @@
  * metaspot-plugin-lib.js
  */
 
+var stoppedAutoRefresh = false;
+
 function renderUIVolRenderer() {
 	//console.log('renderUIVol()');
 	// Load session vars (required for multi-client)
@@ -52,7 +54,7 @@ function renderUIVolRenderer() {
 }
 
 function loadDummyData(title, artist, album, coverurl) {
-  console.log("metaspot-plugin-lib.js - Page loaded - Metadata=");
+  console.log("metaspot-plugin-lib.js - Page reloaded");
 
   SESSION.json['volmute'] = '1';
   SESSION.json['mpdmixer'] = 'hardware'
@@ -78,11 +80,39 @@ function loadDummyData(title, artist, album, coverurl) {
   $('#mbrand').css('display', 'none');
   $('#menu-settings').css('display', 'none');
 
+  // Show busy spinner
+  console.log("metaspot-plugin-lib.js - Show busy spinner");
+  $('.busy-spinner').show();
+  // $('.busy-spinner').css('display', 'block');
+  $('.busy-spinner').click(function() {
+    if (!stoppedAutoRefresh) {
+      stoppedAutoRefresh = true;
+      $('.busy-spinner').hide();
+    }    
+  });
+
+  // Countdown
+  $('#countdown').show();
+
+  // Show Playbuttons
+  // ACTIVE: #playback-panel.active #playback-controls, #playback-panel.active #playbtns, #playback-panel.active #togglebtns
+  $('#playbtns').show();
+
+  // Volzone
+  $('#volcontrol').show();
+
   // SESSION.json['volknob']
   console.log("metaspot-plugin-lib.js - Session=" + JSON.stringify(SESSION.json));
   renderUIVolRenderer();
 }
 
-function setAutoRefresh(t) {
-  setTimeout("location.reload(true);", t);
+function refreshPage() {
+  if (!stoppedAutoRefresh) {
+    window.location.reload(true);
+  }
 }
+
+function setAutoRefresh(t) {
+  setTimeout(refreshPage, t);
+}
+

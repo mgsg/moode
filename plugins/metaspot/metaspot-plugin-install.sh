@@ -20,13 +20,11 @@ HOSTNAME=$(hostname -s)
 BACKUP_FILE="metaspot-backup-$HOSTNAME.tgz"
 
 ###########################################################
-# Kill previous daemons
-echo 'metaspot-plugin-start - Kill started daemons'
-killall vollibrespot 2>&1
-kill $(ps aux | grep '[p]hp /var/www/inc' | awk '{print $2}')
+echo 'Kill previous daemons'
+php /var/www/inc/metaspot-plugin-stop.php 2>&1
 
 ###########################################################
-# Check if backup directory exists
+echo 'Check if backup already exists'
 if [ -f $BACKUP_FILE ]; then
   # TODO: Backup original files
   backup_files1="/var/www/spo-config.php"
@@ -42,7 +40,7 @@ else
 fi
 
 ###########################################################
-# Copy modified moOde files
+echo 'Copy modified moOde files'
 cp ./spo-config.php             /var/www
 cp ./spo-config.html            /var/www/templates
 # cp ./engine-mpd.php             /var/www
@@ -55,7 +53,6 @@ cp ./worker.php                  /var/www/command
 echo 'Copy metaspot-plugin files'
 chmod +x ./metaspot-plugin-install.sh
 chmod +x ./metaspot-plugin-start.php
-
 cp ./metaspot-plugin-install.sh /var/local/www/commandw
 cp ./metaspot-plugin-daemon.php /var/www/inc
 cp ./metaspot-plugin-start.php  /var/www/inc
@@ -69,57 +66,67 @@ cp ./metaspot-plugin-tpl.html   /var/www/templates
 # Copy installation procedure.
 # Borrowed from: https://github.com/balbuze/volumio-plugins/blob/master/plugins/music_service/volspotconnect2/install.sh
 echo 'Install Vollibrespot'
+VOLSPOT_EXEC="/usr/local/bin/vollibrespot"
+VOLSPOT_INSTALLED=no
 name="vollibrespot"
 libpath=.
 
-## Get the Daemon binary
-declare -A VLS_BIN=(
-  [armv6l]="vollibrespot-armv6l.tar.xz"  \
-  [armv7l]="vollibrespot-armv7l.tar.xz" \
-  [aarch64]="vollibrespot-armv7l.tar.xz" \
-  [i686]="vollibrespot-i686.tar.xz" \
-)
-
-# Find arch
-cpu=$(lscpu | awk 'FNR == 1 {print $2}')
-echo "Detected cpu architecture as $cpu"
-
-# Download and extract latest release
-cd $libpath
-if [ ${VLS_BIN[$cpu]+ok} ]; then
-  # Check for the latest release first
-  RELEASE_JSON=$(curl --silent "https://api.github.com/repos/ashthespy/vollibrespot/releases/latest")
-  # LATEST_VER=$(jq -r  '.tag_name' <<< "${RELEASE_JSON}")
-  LATEST_VER=$(curl --silent "https://api.github.com/repos/ashthespy/vollibrespot/releases/latest" | grep -Po '"tag_name":(.*?[^\\]",)')
-  echo "Supported device (arch = $cpu), downloading required packages for vollibrespot $LATEST_VER"
-  LATEST_VER="v0.2.2"
-  DOWNLOAD_URL="https://github.com/ashthespy/Vollibrespot/releases/download/$LATEST_VER/${VLS_BIN[$cpu]}"
-  echo "Downloading file <${DOWNLOAD_URL}>"
-  wget $DOWNLOAD_URL
-  if [ $? -eq 0 ]; then
-    echo "Extracting..."
-    tar -xf ${VLS_BIN[$cpu]}
-    rm ${VLS_BIN[$cpu]}
-  else
-    echo -e "Failed to download vollibrespot daemon. Check for internet connectivity/DNS issues. \nTerminating installation!"
-    exit -1
-  fi
-else
-  echo -e "Sorry, current device (arch = $cpu) is not supported! \nTerminating installation!"
-  exit -1
+# Check if vollspot is installed
+if [ -f $VOLSPOT_EXEC ]; then
+  VOLSPOT_INSTALLED=yes
 fi
 
-## Install the service
-# For now just copy to /usr/local/bin
-chmod +x ./vollibrespot
-cp ./vollibrespot               /usr/local/bin
-# TODO: Explore install it as systemd service
-# sudo tar -xvf ${name}.service.tar -C /
-# sudo chmod +x /data/plugins/music_service/${name}/onstart1.sh
-echo "${name} installed"
+## Get the Daemon binary
+if [[ $VOLSPOT_INSTALLED == no ]]; then
+  declare -A VLS_BIN=(
+    [armv6l]="vollibrespot-armv6l.tar.xz"  \
+    [armv7l]="vollibrespot-armv7l.tar.xz" \
+    [aarch64]="vollibrespot-armv7l.tar.xz" \
+    [i686]="vollibrespot-i686.tar.xz" \
+  )
+
+  # Find arch
+  cpu=$(lscpu | awk 'FNR == 1 {print $2}')
+  echo "Detected cpu architecture as $cpu"
+
+  # Download and extract latest release
+  cd $libpath
+  if [ ${VLS_BIN[$cpu]+ok} ]; then
+    # Check for the latest release first
+    RELEASE_JSON=$(curl --silent "https://api.github.com/repos/ashthespy/vollibrespot/releases/latest")
+    # LATEST_VER=$(jq -r  '.tag_name' <<< "${RELEASE_JSON}")
+    LATEST_VER=$(curl --silent "https://api.github.com/repos/ashthespy/vollibrespot/releases/latest" | grep -Po '"tag_name":(.*?[^\\]",)')
+    echo "Supported device (arch = $cpu), downloading required packages for vollibrespot $LATEST_VER"
+    LATEST_VER="v0.2.2"
+    DOWNLOAD_URL="https://github.com/ashthespy/Vollibrespot/releases/download/$LATEST_VER/${VLS_BIN[$cpu]}"
+    echo "Downloading file <${DOWNLOAD_URL}>"
+    wget $DOWNLOAD_URL
+    if [ $? -eq 0 ]; then
+      echo "Extracting..."
+      tar -xf ${VLS_BIN[$cpu]}
+      rm ${VLS_BIN[$cpu]}
+    else
+      echo -e "Failed to download vollibrespot daemon. Check for internet connectivity/DNS issues. \nTerminating installation!"
+      exit -1
+    fi
+  else
+    echo -e "Sorry, current device (arch = $cpu) is not supported! \nTerminating installation!"
+    exit -1
+  fi
+
+  ## Install the service
+  # For now just copy to /usr/local/bin
+  chmod +x ./vollibrespot
+  cp ./vollibrespot               /usr/local/bin
+  # TODO: Explore install it as systemd service
+  # sudo tar -xvf ${name}.service.tar -C /
+  # sudo chmod +x /data/plugins/music_service/${name}/onstart1.sh
+  echo "${name} installed"
+else
+  echo "${name} already installed"
+fi
 
 ###########################################################
-# Database changes
 echo 'Creating DB data...'
 SQLDB=/var/local/www/db/moode-sqlite3.db
 
@@ -131,8 +138,8 @@ RESULT=$(sqlite3 $SQLDB "select value from cfg_spotify")
 readarray -t arr <<<"$RESULT"
 BITRATE=${arr[0]}
 METASPOT=${arr[6]}
-echo 'Bitrate' $BITRATE
-echo 'Spotify Metadata' $METASPOT
+echo 'Stored Bitrate' $BITRATE
+echo 'Stored Spotify Metadata' $METASPOT
 
 # Create new cfg_nowplaying table
 RESULT=$(sqlite3 $SQLDB "CREATE TABLE cfg_nowplaying (id INTEGER PRIMARY KEY, param CHAR (32), value CHAR (32))")
@@ -152,5 +159,11 @@ METADATA=${arr[0]}
 TITLE=${arr[1]}
 ARTIST=${arr[2]}
 ALBUM=${arr[3]}
-echo 'Title' $TITLE
-echo 'Artist' $ARTIST
+echo 'Last Song Title' $TITLE
+echo 'Last Song Artist' $ARTIST
+
+###########################################################
+echo 'Start plugin services'
+read -p 'Press <Enter> to start services or <Ctrl-C> otherwise'
+php /var/www/inc/metaspot-plugin-start.php 2>&1 &
+

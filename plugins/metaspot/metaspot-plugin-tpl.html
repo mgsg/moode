@@ -31,7 +31,7 @@
   <script type="text/javascript" src="js/metaspot-plugin-lib.js"></script>
   <script>    
     $(document).ready(function() {
-      console.log("Rendererlib.js - Reload");
+      console.log("metaspot-plugin-lib.js - Reload");
       loadDummyData("$_current[title]", "$_current[artist]", "$_current[album]", "$_current[coverurl]");
       setAutoRefresh(20000);
     });
@@ -62,7 +62,12 @@
 					<div id="timezone">
 						<div id="timeknob">
 							<div id="countdown">
-								<input aria-label="Playback Time" class="playbackknob" id="time" data-min="0" data-max="1000" data-width="100%" data-thickness=".14" data-bgColor="rgba(50,50,50,0.5)" data-fgcolor="transparent" data-readonly="false">
+                <!-- START Countdown Content-->
+                <div style="width: 157px; height: 157px;">
+                  <canvas width="392" height="392" style="width: 157px; height: 157px;">
+                  </canvas>
+                  <input aria-label="Playback Time" class="playbackknob" id="time" data-min="0" data-max="1000" data-width="100%" data-thickness=".14" data-bgcolor="rgba(50,50,50,0.5)" data-fgcolor="transparent" data-readonly="false" style="width: 82px; height: 52px; position: absolute; vertical-align: middle; margin-top: 52px; margin-left: -119px; border: 0px; background: none; font: bold 26px Arial; text-align: center; color: transparent; padding: 0px; appearance: none;"></div>
+                <!-- END Countdown Content-->
 							</div>
 							<div aria-label="Countdown Display" id="countdown-display" href="#notarget"></div>
 							<div aria-label="Total" id="total"></div>
@@ -79,12 +84,19 @@
 					</div>
 					<div id="volzone">
 						<div id="volknob">
-							<div id="volcontrol" class="volume-step-limiter">
-								<input aria-label="Volume" readonly class="volumeknob" id="volume" data-min="0" data-max="100" step="10" data-width="100%" data-thickness=".14" data-bgColor="rgba(50,50,50,0.5)" data-fgColor="transparent" data-readOnly="false" data-cursor="false" data-angleArc="340" data-angleOffset="-170">
+							<div id="volcontrol" class="volume-step-limiter">								
+                <!-- START Volume -->
+                <div style="display: inline-block; width: 157px; height: 157px;">
+                  <canvas width="392" height="392" style="width: 157px; height: 157px;">
+                  </canvas>
+                  <input aria-label="Volume" readonly="readonly" class="volumeknob" id="volume" data-min="0" data-max="100" step="10" data-width="100%" data-thickness=".14" data-bgcolor="rgba(50,50,50,0.5)" data-fgcolor="transparent" data-readonly="false" data-cursor="false" data-anglearc="340" data-angleoffset="-170" style="width: 82px; height: 52px; position: absolute; vertical-align: middle; margin-top: 52px; margin-left: -119px; border: 0px; background: none; font: bold 31px Arial; text-align: center; color: transparent; padding: 0px; appearance: none;">
+                </div>
+                <!-- STOP Volume -->
 							</div>
 							<div id="volbtns">
 								<button aria-label="Volume Up" id="volumeup" class="btn btn-cmd btn-volume">+</button>
-								<div aria-label="Volume Display" class="volume-display" href="#notarget"><div></div></div>
+								<div aria-label="Volume Display" class="volume-display" href="#notarget"><div>                  
+                </div>25</div>
 								<button aria-label="Volume Down" id="volumedn" class="btn btn-cmd btn-volume">−</button>
 							</div>
 							<div aria-label="Volume Display dB" class="volume-display-db"></div>

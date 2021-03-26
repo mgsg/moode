@@ -30,6 +30,9 @@ try {
   playerSession('write', 'mpdmixer', 'software');
   session_write_close();
 
+  // Check permissions on the session file
+  phpSessionCheck();
+
   // Spotify metadata
   $resultSpotify = sdbquery("SELECT * FROM cfg_spotify", cfgdb_connect());
   $cfg_spotify = array();
