@@ -107,8 +107,6 @@ function storeMetadata($metaobj) {
 }
 
 function processMetadataInfo($metadata) {
-  debugLog('Reply (5030):' . $metadata);
-
   if ($metadata[0] === '{') {
     $metaobj = json_decode($metadata);
     if (isset($metaobj->state) && isset($metaobj->state->status) && $metaobj->state->status == 'play') {
@@ -133,11 +131,17 @@ function processMetadataInfo($metadata) {
       $newVolume = $metaobj->volume;
       debugLog('New volume =[' . $newVolume . ']');
       cfgdb_update('cfg_nowplaying', $dbh, 'volume', $metaobj->volume);
+    } else if (isset($metaobj->token)) {
+      debugLog('New Token - Do something about it!');
+    } else {
+      debugLog('Reply (5030):' . $metadata);
     }
   } else if ($metadata === 'kSpDeviceActive') {
     debugLog('kSpDeviceActive');
   } else if ($metadata === 'kSpPlaybackLoading') {
     debugLog('kSpDeviceActive');
+  } else {
+    debugLog('Unknown Message: ' . $metadata);
   }
 }
 
