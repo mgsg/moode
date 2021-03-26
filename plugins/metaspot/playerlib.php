@@ -2625,26 +2625,50 @@ function startSpotify() {
 		$device = 'plughw:' . $_SESSION['cardnum'];
 	}
 
-	$volume_normalization = $cfg_spotify['volume_normalization'] == 'Yes' ? ' --enable-volume-normalisation --normalisation-pregain ' .  $cfg_spotify['normalization_pregain'] : '';
-	$autoplay = $cfg_spotify['autoplay'] == 'Yes' ? ' --autoplay' : '';
+  // metaspot-plugin START
+  if ($cfg_spotify['vollibrespot'] == 'Yes') {
+    $volume_normalization = $cfg_spotify['volume_normalization'] == 'Yes' ? ' -p ' .  $cfg_spotify['normalization_pregain'] : '';
+    $autoplay = $cfg_spotify['autoplay'] == 'Yes' ? ' -a' : '';
 
-	$cmd = 'librespot' .
-		' --name "' . $_SESSION['spotifyname'] . '"' .
-		' --bitrate ' . $cfg_spotify['bitrate'] .
-		' --initial-volume ' . $cfg_spotify['initial_volume'] .
-		' --volume-ctrl ' . $cfg_spotify['volume_curve'] .
-		$volume_normalization .
-		$autoplay .
-		' --cache /var/local/www/spotify_cache --disable-audio-cache --backend alsa --device "' . $device . '"' . // audio file cache eats disk space
-		' --onevent /var/local/www/commandw/spotevent.sh' .
-		' > /dev/null 2>&1 &';
-		//' -v > /home/pi/librespot.txt 2>&1 &'; // For debug
+    $cmd = 'php /var/www/inc/metaspot-plugin-start.php' .
+      ' -n "' . $_SESSION['spotifyname'] . '"' .
+      ' -b ' . $cfg_spotify['bitrate'] .
+      ' -v ' . $cfg_spotify['initial_volume'] .
+      ' -c ' . $cfg_spotify['volume_curve'] .
+      $volume_normalization .
+      $autoplay .
+      ' -d ' . $device . 
+      ' >> /var/log/metaspot-plugin.log 2>&1 &';
+    workerLog('startSpotify(): (' . $cmd . ')');  
+    sysCmd($cmd);
+    return;
+	}
+  // metaspot-plugin END
 
-	debugLog('startSpotify(): (' . $cmd . ')');
-	sysCmd($cmd);
+  $volume_normalization = $cfg_spotify['volume_normalization'] == 'Yes' ? ' --enable-volume-normalisation --normalisation-pregain ' .  $cfg_spotify['normalization_pregain'] : '';
+  $autoplay = $cfg_spotify['autoplay'] == 'Yes' ? ' --autoplay' : '';
+
+  $cmd = 'librespot' .
+    ' --name "' . $_SESSION['spotifyname'] . '"' .
+    ' --bitrate ' . $cfg_spotify['bitrate'] .
+    ' --initial-volume ' . $cfg_spotify['initial_volume'] .
+    ' --volume-ctrl ' . $cfg_spotify['volume_curve'] .
+    $volume_normalization .
+    $autoplay .
+    ' --cache /var/local/www/spotify_cache --disable-audio-cache --backend alsa --device "' . $device . '"' . // audio file cache eats disk space
+    ' --onevent /var/local/www/commandw/spotevent.sh' .
+    ' > /dev/null 2>&1 &';
+    //' -v > /home/pi/librespot.txt 2>&1 &'; // For debug
+  debugLog('startSpotify(): (' . $cmd . ')');  
+  sysCmd($cmd);  
 }
 function stopSpotify() {
 	sysCmd('killall librespot');
+  // metaspot-plugin START
+  sysCmd('killall vollibrespot');
+  // metaspot-plugin-daemon - killall doesn't work with specific php launched process: use pkill with saved PID
+  sysCmd('pkill -F /var/log/metaspot-plugin-daemon.pid');
+  // metaspot-plugin END
 	sysCmd('/var/www/vol.sh -restore');
 	// Reset to inactive
 	playerSession('write', 'spotactive', '0');

@@ -1,30 +1,6 @@
 /*!
- * moOde audio player (C) 2014 Tim Curtis
- * http://moodeaudio.org
- *
- * tsunamp player ui (C) 2013 Andrea Coiutti & Simone De Gregori
- * http://www.tsunamp.com
- *
- * This Program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3, or (at your option)
- * any later version.
- *
- * This Program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *
- * 2020-12-15 TC moOde 7.0.0
- *
+ * metaspot-plugin-lib.js
  */
-
-// Constants
-const RENDERER_DATA       = 1;        // y Kernel architecture option on System Config
-
 
 function renderUIVolRenderer() {
 	//console.log('renderUIVol()');
@@ -76,7 +52,7 @@ function renderUIVolRenderer() {
 }
 
 function loadDummyData(title, artist, album, coverurl) {
-  console.log("Rendererlib.js - Page loaded - Metadata=");
+  console.log("metaspot-plugin-lib.js - Page loaded - Metadata=");
 
   SESSION.json['volmute'] = '1';
   SESSION.json['mpdmixer'] = 'hardware'
@@ -103,7 +79,7 @@ function loadDummyData(title, artist, album, coverurl) {
   $('#menu-settings').css('display', 'none');
 
   // SESSION.json['volknob']
-  console.log("Rendererlib.js - Session=" + JSON.stringify(SESSION.json));
+  console.log("metaspot-plugin-lib.js - Session=" + JSON.stringify(SESSION.json));
   renderUIVolRenderer();
 }
 
