@@ -11,7 +11,7 @@
 
 define('SQLDB', 'sqlite:/var/local/www/db/moode-sqlite3.db');
 define('SQLDB_PATH', '/var/local/www/db/moode-sqlite3.db');
-define('METASPOT_LOG', '/var/log/metadata-plugin-daemon.log');
+define('METASPOT_LOG', '/var/log/metaspot-plugin-daemon.log');
 
 // Debug message logger
 function debugLog($msg, $mode = 'a') {
@@ -148,7 +148,8 @@ $server = '127.0.0.1';
 $portSend = 5031;
 $portReceive = 5030;
 
-debugLog('********************\nStarting udp metadata monitor process');
+debugLog('********************');
+debugLog('Starting udp metadata monitor process');
 
 // Read currently stored metadata info
 $dbh  = cfgdb_connect();

@@ -11,7 +11,7 @@
 
 define('SQLDB', 'sqlite:/var/local/www/db/moode-sqlite3.db');
 define('SQLDB_PATH', '/var/local/www/db/moode-sqlite3.db');
-define('METASPOT_LOG', '/var/log/metaspot-plugin.log');
+define('METASPOT_LOG', '/var/log/metaspot-plugin-start.log');
 
 // Debug message logger
 function debugLog($msg, $mode = 'a') {
@@ -20,7 +20,7 @@ function debugLog($msg, $mode = 'a') {
 	fclose($fh);
 }
 
-debugLog("#########################################\n");
+debugLog("#########################################");
 debugLog("metaspot-plugin-start v0.1");
 
 # TODO: Check sudo
